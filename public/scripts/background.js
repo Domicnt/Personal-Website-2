@@ -1,38 +1,45 @@
-//set up canvas
-let canvas = document.getElementById('canvas');
-let context = canvas.getContext('2d');
-let width = window.innerWidth;
-let Height = 3;
-let height = window.innerHeight * Height;
-context.canvas.width = width;
-context.canvas.height = height;
+var scene = new THREE.Scene();
+var camera = new THREE.OrthographicCamera( window.innerWidth / - 2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / - 2, 0, 1000 );
 
-let w = 50;
-let wScale = width / w;
-let h = 50 * Height;
-let hScale = height / h;
-let scale = 5;
+var renderer = new THREE.WebGLRenderer();
+renderer.setSize( window.innerWidth, window.innerHeight );
+document.body.appendChild( renderer.domElement );
 
-setInterval(function () {
-    //clear canvas
-    //context.clearRect(0, 0, width, height);
-    context.fillStyle = "#002";
-    context.globalAlpha = 0.33;
-    context.fillRect(0, 0, width, height);
-    context.globalAlpha = 1;
-    context.fillStyle = "#999"
-
-    for (let i = 1; i < w; i++) {
-        for (let j = 1; j < h; j++) {
-            let size = scale * (Math.sin((Date.now() / 1000 + j/9) + Math.sin(i * j)) - .25);
-            if (size < 0)
-                continue;
-            let x = i * wScale;
-            x += j%2==0 ? wScale * 1/4 : -wScale * 1/4;
-            let y = j * hScale;
-            context.fillRect(x - size / 2, y - size / 2, size, size);
-        }
+var geometry = new THREE.PlaneGeometry( window.innerWidth, window.innerHeight);
+var material = new THREE.ShaderMaterial( {
+	uniforms: {
+		time: { value: 0 },
+		resolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) }
+	},
+	vertexShader: 
+    `
+    void main() {
+        vec4 modelViewPosition = modelViewMatrix * vec4(position, 1.0);
+        gl_Position = projectionMatrix * modelViewPosition;
     }
+    `,
+	fragmentShader: 
+    `
+    uniform mediump float time;
+    uniform mediump vec2 resolution;
 
-    context.stroke();
-}, 20);
+    void main() {
+        gl_FragColor = vec4(time, time, time, 1.0);
+    }
+    `
+} );
+var plane = new THREE.Mesh( geometry, material );
+scene.add( plane );
+
+//update uniform values
+setInterval(() => {
+    plane.material.uniforms.time.value = (Math.sin(Date.now() / 1000) + 1) / 2;
+}, 10);
+
+camera.position.z = 5;
+
+function render() {
+    requestAnimationFrame( render );
+    renderer.render( scene, camera );
+}
+render();
