@@ -17,22 +17,21 @@ var fragment = `
     uniform vec2[8] directions;
 
     float rand () {
-        return fract(sin(dot(gl_FragCoord.xy/10.0, vec2(12.9898,78.233))) * 1.0 * float(seed));
+        return fract(sin(dot(gl_FragCoord.xy/100.0, vec2(12.9898,78.233))) * 1.0 * float(seed));
     }
 
     void init () {
         float shade = rand();
-        vec3 color = vec3(shade);
+        vec3 color = vec3(shade * 1.2, shade * 1.2, shade * 2.0);
         gl_FragColor = vec4(color, 1);
     }
 
     void main() {
-        vec2 pos = gl_FragCoord.xy / resolution;
         if (setup == 1) {
             init();
             return;
         }
-        vec4 color = texture2D(sampler, pos.xy);
+        vec4 color = texture2D(sampler, (gl_FragCoord.xy / resolution));
         color += (rand() - .5) *.05;
         gl_FragColor = color;
     }
@@ -97,8 +96,8 @@ scene.add(plane2);
 camera.position.z = 5;
 
 setInterval(() => {
-    plane.material.uniforms.seed.value = Date.now() % 1000;
-    plane2.material.uniforms.seed.value = Date.now() % 1000
+    plane.material.uniforms.seed.value = (Math.sin(Date.now()) + 2) * 1000;
+    plane2.material.uniforms.seed.value = (Math.sin(Date.now()) + 2) * 1000;
 }, 10);
 
 function render() {
