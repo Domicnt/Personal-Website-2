@@ -9,7 +9,7 @@ canvas {
     top: 0;
     left: 0;
     box-shadow: 5px 5px 10px #111;
-    position: absolute;
+    position: fixed;
 }
 
 .top {
@@ -20,7 +20,6 @@ canvas {
 }
 
 .page {
-    width: 70%;
     margin-left: 15%;
     margin-top: 2%;
     background-color: #222;
@@ -71,6 +70,7 @@ p1 {
 .topnav {
     list-style-type: none;
     font-family: 'Josefin Slab';
+    width: 100%;
 }
 
 a {
@@ -97,3 +97,21 @@ a {
     border-bottom: 20px solid #ccf;
     color: #ccf;
 }
+
+table {
+    font-family: 'Josefin Slab';
+    color: #fff;
+    font-size: 175%;
+    border-collapse: collapse;
+    width: 100%;
+  }
+  
+  td, th {
+    border: 1px solid #444;
+    text-align: center;
+    padding: 8px;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #333;
+  }
