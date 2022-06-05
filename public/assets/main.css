@@ -71,6 +71,7 @@ p1 {
     list-style-type: none;
     font-family: 'Josefin Slab';
     width: 100%;
+    text-align: center;
 }
 
 a {
@@ -78,9 +79,9 @@ a {
 }
 
 .topnav a {
-    float: none;
-    width: 10%;
-    transform: translate(350%, 0%);
+    width: auto;
+    padding-left: 1%;
+    padding-right: 1%;
     display: inline-block;
     color: white;
     text-align: center;
